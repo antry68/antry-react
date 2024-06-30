@@ -1,0 +1,189 @@
+React
+
+1. How to pass data form Parent to Child
+	
+	When we need to pass data from a parent to child component, we do this by using props.
+	
+	const Parent = () => {
+	  const [message] = React.useState("Hello World");	 
+	  return (
+		  <Child passDataToChild={message} />
+		</div>
+	  );
+	};
+	
+	const Child = ({ passDataToChild }) => {
+	  return (
+		<div>
+			{passDataToChild}
+		</div>
+	  );
+	};
+	
+
+2. How to pass data form Child to Parent
+	
+	Create a callback function in the parent component. This callback function will get the data from the child component.
+	Pass the callback function in the parent as a prop to the child component.
+	The child component calls the parent callback function using props.
+	
+	const Parent = () => {
+	  const [message, setMessage] = React.useState("Hello World");
+	  const chooseMessage = (message) => {
+		setMessage(message);
+	  };
+	  return (
+		<div>
+		  <h1>{message}</h1>
+		  <Child chooseMessage={chooseMessage} />
+		</div>
+	  );
+	};
+	
+	const Child = ({ chooseMessage }) => {
+	  let msg = 'Goodbye';
+	  return (
+		<div>
+		  <button onClick={() => chooseMessage(msg)}>Change Message</button>
+		</div>
+	  );
+	};
+	
+3. Higher order components
+
+	Higher-order components (HOCs) are a powerful feature of the React library. 
+	They allow you to reuse component logic across multiple components.
+	HOCs allow you to add additional functionality to a component without modifying the component's code. 
+	
+	For example, you can use a HOC to add authentication or routing capabilities to a component or to apply a specific style or behavior to multiple components.
+	
+	HOCs can take additional arguments, which lets you customize the behavior of the HOC. 
+	This makes them a flexible and reusable way to add functionality to your components
+	
+4. Explain hooks such as useNavigate,useMemo,useCallback,useEffect,useState.
+
+	useState:   useState is a React Hook that lets you add a state variable to your component.
+				useState returns an array with exactly two values:
+				The current state. During the first render, it will match the initialState you have passed.
+				The set function that lets you update the state to a different value and trigger a re-render.
+				
+				
+	useEffect is used for handling side effects and executing code after rendering or when certain dependencies change.
+	useMemo is used to memoize the result of a function or expression to prevent unnecessary recalculations.
+	useCallback is used to memoize functions, especially useful for optimizing child components that depend on callback functions.
+
+
+	useEffect:  The useEffect hook that helps us to perform mutations, subscriptions, timers, logging, and other side effects after all the components has been rendered. 
+				The useEffect accepts a function that is imperative in nature and a list of dependencies. 
+				When its dependencies change it executes the passed function.
+				
+				useEffect(() => {
+						const connection = createConnection(serverUrl, roomId);
+						connection.connect();
+						return () => {
+						  connection.disconnect();
+						};
+					  }, [serverUrl, roomId]
+				  );
+								
+				If dependency is array is not available, it'll execute on every render of component.
+				If dependency array there,but blank, then it'll execute only once on initial render of component.
+				If any value is there in dependency array, then it'll execute only when the value of dependency array is chnaged.
+				
+				
+	useCallback: The useCallback is a react hook that returns a memoized callback when passed a function and a list of dependencies as parameters. 
+				 It’s very useful when a component is passing a callback to its child component to prevent the rendering of the child component. 
+				 It only changes the callback when one of its dependencies gets changed.
+				 
+				 const handleSubmit = useCallback((orderDetails) => { // Caches your function itself
+							post('/product/' + productId + '/buy', {
+							  referrer,
+							  orderDetails,
+							});
+						}, [productId, referrer]
+					);
+
+								
+	useMemo: The useMemo is similar to useCallback hook as it accepts a function and a list of dependencies 
+			 but it returns the memoized value returned by the passed function. It recalculated the value only when one of its dependencies change. 
+			 It is useful to avoid expensive calculations on every render when the returned value is not going to change.
+			 
+			 const visibleTodos = useMemo(() => { // Calls your function and caches its result
+						return computeRequirements(product);
+					}, [deoendency_Array]
+				);
+				
+				
+	imported form:
+	
+				import React, { useEffect, useState, useMemo, useCallback } from "react";
+				import { useNavigate } from "react-router-dom";
+				
+	useNavigate: The useNavigate() hook is introduced in the React Router v6 to replace the useHistory() hook. 
+				 In the earlier version, the useHistory() hook accesses the React Router history object and navigates
+				 to the other routers using the push or replace methods. It helps to go to the specific URL, forward or backward pages. 
+				 In the updated version, the React Router’s new navigation API provides a useNavigate() hook which is an imperative version 
+				 to perform the navigation actions with better compatibility.
+				 
+				  const navigate = useNavigate();
+				  useEffect(() => {
+					if (true) {
+					  fake.logout();
+					  navigate("/session-timed-out");
+					}
+				  });
+	
+5. Custom Hooks in React
+	
+	A custom Hook is a JavaScript function whose name starts with ”use” and that may call other Hooks.
+	
+		import { useState, useEffect } from "react";
+
+		const useOnline = () => {
+		  const [isOnline, setIsOnline] = useState(true);
+
+		  useEffect(() => {
+			const handleOnline = () => {
+			  setIsOnline(true);
+			};
+			const handleOffline = () => {
+			  setIsOnline(false);
+			};
+
+			window.addEventListener("online", handleOnline);
+			window.addEventListener("offline", handleOffline);
+
+			return () => {
+			  window.removeEventListener("online", handleOnline);
+			  window.removeEventListener("offline", handleOffline);
+			};
+		  }, []);
+
+		  return isOnline;
+		};
+	
+	Usage:
+		const isOnline = useOnline();
+		retrun(
+			<h1 data-testid="online-status">{isOnline ? "✅" : "🔴"}</h1>
+		);
+	
+6. Component LifeCycle of React component.
+
+	Constructor - The constructor method is the first to be called when a component is
+				  created. It's where we typically initialize the component's state and bind event
+				  handlers.
+	Render - The render method is responsible for rendering the component's UI. It
+			 must return a React element (typically JSX) representing the component's
+			 structure.
+	ComponentDidMount - This method is called immediately after the component is
+						inserted into the DOM. It's often used for making AJAX requests, setting up
+						subscriptions, or other one-time initializations.
+	ComponentDidUpdate - This method is called after the component has been updated
+						 (re-rendered) due to changes in state or props. It's often used for side effects, 
+						 like updating the DOM in response to state or prop changes.
+
+	ComponentWillUnmount - This method is called just before the component is removedfrom the DOM. 
+						   It's used to clean up resources or perform any necessary cleanup.
+						   
+7. 

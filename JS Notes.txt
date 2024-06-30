@@ -1,0 +1,139 @@
+JS concept with examples
+
+1. Falttening Nested Array
+
+		const calculateDepth=(arr)=>{
+			let depth=1;
+			arr.map((elem)=>{
+			   if(Array.isArray(elem)){
+			   //call recursive fn if element is an array to calculate the nested depth.
+				   const nestedDepth=calculateDepth(elem)+1;
+				   depth=Math.max(depth,nestedDepth);
+			   }
+			});
+			return depth;
+		}
+		console.log(arr5.flat(calculateDepth(arr5)));
+
+2. Check if Give strings are Anagram or not
+
+		str1="Listen";
+		str2="Silent";
+
+		const checkAnagram=(str1,str2)=>{
+			if(str1.toLowerCase().split("").sort().join("")===str2.toLowerCase().split("").sort().join("")){
+				return true;	
+			}else{
+				return false;
+			}
+		}
+
+		console.log(checkAnagram(str1,str2));
+
+3. Check if Give number is Palindrome or not
+
+		const num=12321;
+		
+		const checkPalindrom=(num)=>{
+			if(num.toString().split("").reverse().join("")===num.toString()){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		console.log(checkPalindrom(num));
+		
+4. implement array operations using map, filter,reduce.
+
+	const arr=[12,23,34,54,14];
+	
+	const useMapMethodToMultipleBy2=(arr)=>{
+		const newVal= arr.map((element)=>{
+		return	element*2;
+		});
+        return newVal;
+	}
+	
+	const useFilterToReturnValueMoreThanThirty=(arr)=>{
+		const newVal=arr.filter((element)=>{
+			return element>30;
+		})
+		return newVal;
+	}
+	
+	const useFilterMethodToCalculateSumOfArrayELements=(arr)=>{
+		const sum=arr.reduce((curr,acc)=>{
+			return curr+acc;
+		},0);
+		return sum;
+	}
+	
+	console.log(useMapMethodToMultipleBy2(arr));
+	console.log(useFilterToReturnValueMoreThanThirty(arr));
+	console.log(useFilterMethodToCalculateSumOfArrayELements(arr));
+	
+5. Remove duplicate object from below array of object
+	
+	const arr=[{id:1, ""name"":""abc""},
+				{id:2, ""name"":""sc""},
+				{id:1, ""name"":""abc""}
+			];
+			
+	const seen = new Set();
+	const uniqueArr = arr.filter(item => {
+	  const duplicate = seen.has(item.id);
+	  seen.add(item.id);
+	  return !duplicate;
+	});
+
+	console.log(uniqueArr);
+
+	
+	
+6. Return reversed version of each string in same order 
+
+
+	let sample = "Hi Anpurn" // iH nrupnA
+
+	function reversed(str){	  
+		return str.split(" ").map((item)=>{return item.split("").reverse().join("")}).join(" ");
+	}
+
+	console.log(reversed(sample));
+
+7. Print 1,2,3,4,5 after an interval of 1 sec
+
+	const printNumberAfterEachSecond=()=>{
+		for(let i=1;i<6;i++){
+			setTimeout(
+				()=>{console.log(i);}
+			,1000*i);
+		}        
+	}
+	
+	printNumberAfterEachSecond();
+
+8.Deep COpy Shallw Copy in objects
+
+	I. Objects are copied by reference and variables by value. 
+
+	II. To copy objects by value:  
+
+	let obj1={id:2, "name":"sc"};
+	
+	let Obj2=Object.Assign({}, obj1) 
+
+	let Obj2={...obj}
+
+	III. The above method is shallow copy. It copies only top-level fields, nested object values won't be copied. 
+
+	IV To copy nested objects, deep copy comes into picture. 
+
+	let obj1={id:2, "name":"sc"};
+	let obj2=JSON.parse(JSON.stringify(obj1));
+
+	V. But the above doesn’t copy functions and dates. So, loadash is used. 
+
+	==>_.cloneDeep(obj)
+	
+	
